@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stride-x"
+version = "0.3.0"
+description = "STRIDE-X: Stratified Tiered Risk & Integrity Detection Engine for enterprise performance data"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "STRIDE-X Contributors"}]
+dependencies = [
+  "pandas>=2.0",
+  "numpy>=1.24",
+  "openpyxl>=3.1",
+  "pyarrow>=14.0",
+  "click>=8.1",
+  "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit>=1.28", "plotly>=5.18"]
+llm = ["openai>=1.0", "httpx>=0.25", "anthropic>=0.40"]
+pdf = ["reportlab>=4.0"]
+all = ["stride-x[dashboard,llm,pdf]"]
+
+[project.scripts]
+stride-x = "stride_x.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["stride_x*"]

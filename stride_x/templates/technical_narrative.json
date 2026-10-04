@@ -1,0 +1,23 @@
+{
+  "technical_summary": "Stratified tiered anomaly scan detected statistical deviations across multi-dimensional micro-segments where aggregate macro metrics remained within baseline tolerance.",
+  "layer_breakdown": {
+    "L1": "Domain integrity checks identified null-padding and orphaned foreign key joins during ETL promo attribution.",
+    "L2": "Segment-level Z-score evaluation (|Z| > 3.0) isolated high-impact negative margin cells masked by overall revenue.",
+    "L3": "Vector divergence spotted engagement click-volume spikes that failed to resolve into settled ledger revenue.",
+    "L4": "Period structural analysis indicated steady margin erosion over rolling 30-day windows."
+  },
+  "actionable_recommendations": [
+    {
+      "title": "ETL & Pipeline Fixes",
+      "action": "Audit ingestion scripts for missing foreign key constraints on campaign attribution tables."
+    },
+    {
+      "title": "Dynamic Baseline Implementation",
+      "action": "Deploy rolling 30-day windowed Z-score models in dbt to replace static global thresholding."
+    },
+    {
+      "title": "Ledger Reconciliation Automation",
+      "action": "Schedule automated micro-batch jobs comparing engagement event logs with transaction ledgers every 2 hours."
+    }
+  ]
+}

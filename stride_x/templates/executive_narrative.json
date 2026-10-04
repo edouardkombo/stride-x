@@ -1,0 +1,19 @@
+{
+  "analogy_headline": "The Silent Leak in a Growing Business",
+  "analogy_body": "Imagine running a chain of 100 successful retail stores. On paper, total daily revenue is reaching record highs. However, in 3 specific stores, a glitch in the checkout system is giving away free premium inventory. Because the other 97 stores are performing so well, overall company profit stays green, hiding a severe daily margin leak.",
+  "key_findings_intro": "STRIDE-X detected hidden margin leaks that aggregate dashboards miss:",
+  "actionable_recommendations": [
+    {
+      "title": "Immediate Campaign Pause",
+      "action": "Freeze promotional spending on identified outlier sub-segments immediately to prevent continuous loss."
+    },
+    {
+      "title": "Cross-Functional Alignment",
+      "action": "Convene Finance, Product, and Marketing leads to reconcile daily ledger entries against marketing credits."
+    },
+    {
+      "title": "Automated Guardrails",
+      "action": "Establish hard stop-loss policies per account to ensure no sub-segment can exceed daily allocated risk thresholds."
+    }
+  ]
+}
