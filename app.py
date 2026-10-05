@@ -61,7 +61,7 @@ from stride_x import StrideXEngine, ReportBuilder
 from stride_x.config import Thresholds
 from stride_x.artifacts import export_all
 from stride_x.pdf_report import write_pdf
-from stride_x.cli import _fallback_plain, _fallback_technical, _fallback_layers
+from stride_x.narratives import build_split_narratives
 
 # Resolve input path
 path = None
@@ -140,11 +140,7 @@ else:
     except Exception:
         pass
 
-narratives = {
-    "plain": _fallback_plain(result),
-    "technical": _fallback_technical(result),
-    "layers": _fallback_layers(result),
-}
+narratives = build_split_narratives(result)
 
 if use_llm:
     with st.spinner("LLM narratives (3 calls: plain + technical + layers)…"):

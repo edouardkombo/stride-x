@@ -1,0 +1,23 @@
+{
+  "technical_summary": "Stratified scan separates data-integrity defects, operational black-swan days, and period/product mechanics that aggregate company Z-scores miss.",
+  "layer_breakdown": {
+    "L1": "Sign and identity checks on stake, volume, actives; promo-compatible stake=0 netting vs true negatives.",
+    "L2": "Company daily Z plus within-segment temporal Z; masked losses when company_profit > 0 and cell impact is severe.",
+    "L3": "Engagement ratios vs financials to detect logging or promo engines that inflate activity without healthy margin.",
+    "L4": "Period margin Z for structural regime changes."
+  },
+  "actionable_recommendations": [
+    {
+      "title": "Integrity gates in dbt",
+      "action": "Fail builds on negative stake/volume; document stake=0 P&L as promo settlement, not silent error."
+    },
+    {
+      "title": "Masked-loss monitor",
+      "action": "Daily job: company_profit > 0 and segment profit < -critical_threshold → page Risk Tech."
+    },
+    {
+      "title": "Within-segment baselines",
+      "action": "Rolling 30-day Z per Market×Platform in the warehouse; do not use a single global threshold only."
+    }
+  ]
+}

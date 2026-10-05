@@ -1,0 +1,18 @@
+{
+  "analogy_headline": "The silent leak under a green total",
+  "analogy_body": "Imagine a chain of successful stores. Head-office sales look excellent. In a few locations a checkout glitch gives inventory away. Because the rest of the chain is strong, the company total stays green — and the leak never appears on the executive dashboard.",
+  "actionable_recommendations": [
+    {
+      "title": "Brief on masked losses, not only the net",
+      "action": "Require the weekly pack to list every segment loss above the critical threshold on days when company profit was still positive."
+    },
+    {
+      "title": "Owner on every CRITICAL finding",
+      "action": "Assign Risk/Trading, Finance, Product, or Data Engineering with a due date before the next board risk review."
+    },
+    {
+      "title": "Stop relying on a single company KPI",
+      "action": "Add segment materiality alerts so green company days cannot hide red cells."
+    }
+  ]
+}

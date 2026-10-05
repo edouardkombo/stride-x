@@ -2,241 +2,195 @@
 
 **Stratified Tiered Risk & Integrity Detection Engine**
 
-> Aggregate dashboards answer: *“Did the company have a bad day?”*  
-> STRIDE-X answers: *“Where inside a profitable day is margin or data integrity breaking?”*
+> Aggregate dashboards ask: *“Did the company have a bad day?”*  
+> STRIDE-X asks: *“Where inside a profitable day is margin or data integrity breaking?”*
 
-Version **0.3** — unified LLM config, full audit exports, Streamlit audit UI, Ollama / OpenAI / Gemini / Anthropic.
+**Article (project thesis):**  
+[Your Dashboard Is Lying to You: Why Top-Line Metrics Are Destroying Enterprise Profitability](https://edouard-kombo.medium.com/your-dashboard-is-lying-to-you-why-top-line-metrics-are-destroying-enterprise-profitability-014ce58596ed)
 
----
-
-## Why this exists (psychology of the blind spot)
-
-Leadership tools are optimized for **comfort**, not diagnosis. A single green KPI (company daily profit, company margin) creates a false sense of control. In multi-market, multi-platform businesses, that number is a **net** of winners and losers.
-
-Humans and naive monitors both fall for the same trap:
-
-1. **Forest vs trees** — The forest (company total) can look healthy while individual trees (Market × Platform cells) are on fire.
-2. **Alert fatigue** — Teams that try full granularity drown in −€400 noise and raise thresholds until only macro disasters remain.
-3. **Context confusion** — Blunt rules (`value ≤ 0 → bad`) treat promotional free-bet settlements like ETL corruption.
-
-STRIDE-X is designed for the uncomfortable middle: **stratified signal with materiality routing**, so serious issues surface without requiring the whole company to have a “bad day.”
+Version **0.3** — unified LLM config · dual-audience narratives · charted PDF/HTML · BI hand-off pack · Streamlit UI.
 
 ---
 
-## Differentiation: regular UAD vs STRIDE-X
+## The problem (psychology of the blind spot)
 
-| | **Regular UAD** (aggregate) | **STRIDE-X** |
-|--|------------------------------|--------------|
-| Grain | Company (or one entity) daily total | Market × Platform × Date (and period) |
-| Question | Did we have a bad day? | Where is risk hiding under a green day? |
-| Integrity | Often `≤ 0` = error | Domain-aware (promo netting vs true negatives) |
-| Metrics | Single scalar (profit, revenue) | Financials **plus** engagement vectors |
-| Output | Flat anomaly list | Tiered findings + owner routing + BI artifacts |
+Executive tools optimize for **comfort**. A green company KPI is a *net*. In multi-market, multi-platform businesses it can hide large local losses.
 
-On the reference gaming performance audit (R1, 121k rows):
+Three traps:
 
-- Aggregate UAD-style macro Z &lt; −3 ≈ **11** company-bad days  
-- STRIDE-X **masked** segment losses on *profitable* company days: **4** &gt; €1M, **25** &gt; €500k  
-- Within-segment temporal extremes on green days: hundreds (actionable only with materiality tiers)
+1. **Forest vs trees** — Company total looks healthy while Market × Platform cells burn.  
+2. **Alert fatigue** — Full granularity without materiality floods teams; thresholds rise until only macro disasters remain.  
+3. **Context confusion** — Naive `value ≤ 0` rules treat promotional free-bet settlements like ETL corruption.
+
+STRIDE-X targets the middle: **stratified detection + materiality routing + dual-audience recommendations**.
+
+---
+
+## Regular UAD vs STRIDE-X
+
+| | Regular aggregate UAD | STRIDE-X |
+|--|----------------------|----------|
+| Grain | Company daily total | Market × Platform × Date (+ period) |
+| Question | Bad day? | Where is risk under a green day? |
+| Integrity | Blunt sign checks | Domain-aware (promo vs true negatives) |
+| Metrics | Single scalar | Financials + engagement vectors |
+| Output | Flat flags | Tiered findings, owners, charts, BI artifacts |
+
+Reference run (121k rows): ~**11** macro bad days (Z &lt; −3) vs **4** masked segment losses &gt; €1M (and **25** &gt; €500k) on days the company was still profitable overall.
 
 ---
 
 ## Detection layers
 
-| Layer | Name | What it catches |
-|-------|------|-----------------|
-| **L1** | Domain-aware sanitation | Negative stake/volume; zero actives with volume; Stake=0 + P&amp;L (promo vs ETL) |
-| **L2** | Stratified surface | Company-day Z **and** within-segment temporal Z; losses hidden under green company days |
-| **L3** | Vector decoupling | Engagement ratios (e.g. games/active) vs stable stake — period-boundary mechanics |
-| **L4** | Period structure | Fiscal/period margin collapses vs history |
+| Layer | Name | Catches |
+|-------|------|---------|
+| **L1** | Domain-aware sanitation | Negative stake/volume; zero actives with volume; Stake=0 + P&amp;L semantics |
+| **L2** | Stratified surface | Company Z **and** within-segment Z; losses on green company days |
+| **L3** | Vector decoupling | Engagement ratios vs financials (e.g. games/active spikes) |
+| **L4** | Period structure | Fiscal/period margin collapses |
 
-Severity routing: **CRITICAL** / **SEVERE** / **OPERATIONAL** / **LOW** by impact tiers (configurable).
+Severity: **CRITICAL** / **SEVERE** / **OPERATIONAL** / **LOW** (impact tiers configurable).
 
 ---
 
-## Value for data science & analytics engineering
+## What you get from a full export
 
-STRIDE-X is not only a scanner — each `audit` run emits a **reproducible hand-off pack**:
-
-| Artifact | Use |
-|----------|-----|
-| `stride_x_findings.csv` / `.json` | Source of truth for findings |
+| Artifact | Purpose |
+|----------|---------|
+| `STRIDE_X_Executive_Report.pdf` | Charted executive PDF |
+| `STRIDE_X_Executive_Report.html` | Same story, print-ready HTML (open in browser) |
+| `narrative_plain.md` | Leadership: analogy, numbers, **urgent + structural actions** |
+| `narrative_technical.md` | Engineering: layers, root-cause hypotheses, **implementation actions** |
+| `narrative_layers.md` | Method map for auditors / wiki |
+| `stride_x_findings.csv` / `.json` | Source of truth |
 | `stride_x_findings.sql` | Warehouse view |
-| `schema.yml` | dbt tests on severity / keys |
+| `schema.yml` | dbt tests |
 | `stride_x_findings.view.lkml` | Looker |
-| `stride_x_cube.js` | Cube.js semantic layer |
+| `stride_x_cube.js` | Cube.js |
 | `stride_x_measures.dax` | Power BI |
-| `tableau_calculated_fields.txt` | Tableau starters |
-| `repro_checks.py` | Pandas equivalents of core checks |
-| `UAD_vs_STRIDEX.md` | Method comparison for *this* run |
-| `narrative_*.md` | Executive + technical + layer docs |
-| `STRIDE_X_Report.pdf` (or HTML) | Shareable report |
+| `tableau_calculated_fields.txt` | Tableau |
+| `repro_checks.py` | Pandas re-run of core checks |
+| `UAD_vs_STRIDEX.md` | Comparison for *this* run |
 
-That closes the gap between “notebook one-off” and something engineering can implement in the semantic layer.
-
-Works on **any messy tabular extract** (CSV, Excel, Parquet, JSON) when you roughly have: date, profit/PnL, volume base (stake/GMV/amount), and segment columns. Names are auto-detected; overrides available.
+Works on messy CSV / Excel / Parquet / JSON with date, profit, volume base, and segment columns (auto-detected).
 
 ---
 
 ## Install
 
 ```bash
-cd stride_x
+cd new_code   # or your clone root
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 pip install -e .
-stride-x doctor
+stride-x doctor   # if entry point available
+# or: python -m stride_x.cli --help
 ```
 
 ---
 
-## LLM configuration (same names for every provider)
-
-You only change **values**, not variable names. No `unset` required when switching.
+## LLM config (same names for every provider)
 
 ```bash
 export STRIDE_X_LLM_PROVIDER=ollama|openai|gemini|anthropic
 export STRIDE_X_LLM_API_KEY=...
 export STRIDE_X_LLM_MODEL=...
-# optional:
-# export STRIDE_X_LLM_BASE_URL=...
 ```
 
-Check resolution (key masked):
+| Provider | Example |
+|----------|---------|
+| Ollama (default) | `PROVIDER=ollama` `API_KEY=ollama` `MODEL=llama3.2` |
+| Gemini | `PROVIDER=gemini` `API_KEY=…` `MODEL=gemini-2.0-flash` |
+| OpenAI | `PROVIDER=openai` `API_KEY=sk-…` `MODEL=gpt-4o-mini` |
+| Anthropic | `PROVIDER=anthropic` `API_KEY=sk-ant-…` `MODEL=claude-sonnet-4-5` |
 
 ```bash
-stride-x llm-config
+# verify (no full secret printed)
+python -c "from stride_x.llm import resolve_provider; print(resolve_provider())"
 ```
 
-### Ollama (default — local)
-
-```bash
-ollama serve
-ollama pull llama3.2
-
-export STRIDE_X_LLM_PROVIDER=ollama
-export STRIDE_X_LLM_API_KEY=ollama
-export STRIDE_X_LLM_MODEL=llama3.2
-```
-
-### Google Gemini
-
-```bash
-export STRIDE_X_LLM_PROVIDER=gemini
-export STRIDE_X_LLM_API_KEY=your-key-from-aistudio.google.com
-export STRIDE_X_LLM_MODEL=gemini-3.8-flash
-```
-
-### OpenAI
-
-```bash
-export STRIDE_X_LLM_PROVIDER=openai
-export STRIDE_X_LLM_API_KEY=sk-...
-export STRIDE_X_LLM_MODEL=gpt-4o-mini
-```
-
-### Anthropic Claude
-
-```bash
-export STRIDE_X_LLM_PROVIDER=anthropic
-export STRIDE_X_LLM_API_KEY=sk-ant-...
-export STRIDE_X_LLM_MODEL=claude-sonnet-4-5
-```
-
-Copy `.env.example` for contributors. Legacy `OPENAI_*` / `GEMINI_API_KEY` still work as fallbacks; **prefer the unified `STRIDE_X_LLM_*` names.**
-
-Narratives run **three** LLM calls (plain + technical + layers). Local models can be slow — use Gemini/OpenAI/Anthropic for speed, or `--no-llm` for offline structured text.
+Narratives use **three** LLM calls (leadership + technical + layers). Prefer cloud models for speed, or skip LLM and use result-aware templates.
 
 ---
 
 ## How to run
 
-### Full audit package (recommended)
-
 ```bash
-stride-x audit path/to/data.xlsx --out-dir ./audit_out
-stride-x audit path/to/data.xlsx --out-dir ./audit_out --no-llm   # no LLM wait
+# Quick scan
+python -m stride_x.cli scan -i examples/Flat_Summary.csv
+
+# Full package (templates, no LLM)
+python -m stride_x.cli export -i examples/Flat_Summary.csv -o ./audit_out
+
+# Full package + LLM narratives
+python -m stride_x.cli export -i examples/Flat_Summary.csv -o ./audit_out --llm
 ```
 
-### Quick scan
-
-```bash
-stride-x scan path/to/data.xlsx
-stride-x scan path/to/data.xlsx --explain
-stride-x scan data.csv --csv-out findings.csv --json-out findings.json
-```
-
-### Schema overrides (messy extracts)
-
-```bash
-stride-x audit data.csv \
-  --date-col Date \
-  --profit-col Profit \
-  --stake-col Stake \
-  --segment-cols Market,Experience \
-  --out-dir ./audit_out
-```
-
-### Streamlit UI
+Streamlit:
 
 ```bash
 streamlit run app.py
 ```
 
-- Upload file or use example  
-- **Quick scan** or **Full audit package**  
-- Optional LLM narratives  
-- Download findings CSV and full audit ZIP (SQL, LookML, dbt, DAX, Tableau, narratives, PDF/HTML)
-
----
-
-## Python API
+Python:
 
 ```python
 from stride_x import StrideXEngine, ReportBuilder
+from stride_x.narratives import build_split_narratives
 from stride_x.artifacts import export_all
 from stride_x.pdf_report import write_pdf
-from stride_x.llm import explain_dual
 
 result = StrideXEngine().run("data.xlsx")
-ReportBuilder(result).print_console()
-
-narratives = explain_dual(result)  # uses STRIDE_X_LLM_* env
+narratives = build_split_narratives(result)  # or explain_dual(result) with LLM
 export_all(result, "audit_out", narratives=narratives)
-write_pdf(result, "audit_out/STRIDE_X_Report.pdf", narratives=narratives)
+write_pdf(result, "audit_out/STRIDE_X_Executive_Report.pdf", narratives=narratives)
 ```
+
+---
+
+## Report quality bar
+
+Leadership section always includes:
+
+- A **business analogy** (forest/stores/highway — not jargon)  
+- **Numbers that matter** only from the scan  
+- **Urgent fires** and **structural fixes** with owner roles  
+
+Technical section always includes:
+
+- Scan snapshot + UAD comparison  
+- Layer findings  
+- Root-cause *hypotheses* (integrity vs operational vs product)  
+- **Engineering actions** and monitoring to add  
+
+PDF and HTML embed **charts** (top losses, severity mix, layer counts). HTML is the best “elite readable” layout; PDF mirrors it for email packs.
 
 ---
 
 ## Design honesty
 
-1. **Materiality tiers** exist so within-segment Z does not equal infinite alerts.  
-2. **Stake=0 + all-negative P&amp;L** is promo-compatible until proven otherwise — not auto-ETL failure.  
-3. **Periodic vector spikes** are signatures for product/ETL audit; the engine does not invent root cause.  
-4. Classic Microsoft **STRIDE security** labels are not force-mapped onto every margin event (that overclaims).
+1. Materiality tiers stop pure Z-score floods.  
+2. Stake=0 + all-negative P&amp;L is promo-compatible until proven otherwise.  
+3. Period vector spikes are signatures for audit — not automatic “fraud” labels.  
+4. Classic Microsoft STRIDE security tags are **not** force-mapped onto every margin event.
 
 ---
 
 ## Project layout
 
 ```
-stride_x/
+new_code/
   README.md
   .env.example
-  pyproject.toml
+  app.py
   requirements.txt
-  app.py                 # Streamlit: scan + full audit ZIP
+  pyproject.toml
   stride_x/
-    engine.py            # orchestration + UAD comparison stats
-    detectors.py         # L1–L4
-    schema.py            # load + role auto-detect
-    config.py            # thresholds
-    report.py            # console / CSV / JSON
-    llm.py               # unified provider config + dual narratives
-    artifacts.py         # SQL, dbt, LookML, Cube, DAX, Tableau, repro
-    pdf_report.py        # PDF or HTML fallback
-    cli.py               # scan | audit | llm-config | doctor
+    engine.py detectors.py schema.py config.py
+    llm.py narratives.py pdf_report.py artifacts.py
+    report.py cli.py
+    templates/
   examples/
   tests/
 ```
